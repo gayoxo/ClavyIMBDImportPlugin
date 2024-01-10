@@ -18,7 +18,7 @@ public class CollectionIMDB
 		CollectionIMDB C=new CollectionIMDB();
 		ArrayList<String> log = new ArrayList<String>();
 		C.debugfile=true;
-		C.procesaDBFilesFolder("files/ex1/Patient", log);
+		C.procesaDBFilesFolder("files/ex1/", log);
 		
 		 try {
 				String FileIO = System.getProperty("user.home")+File.separator+System.currentTimeMillis()+".clavy";
@@ -39,8 +39,8 @@ public class CollectionIMDB
 		return C;
 	}
 
-	private void procesaDBFilesFolder(String string, ArrayList<String> log) {
-		// TODO Auto-generated method stub
+	private void procesaDBFilesFolder(String folderPath, ArrayList<String> log) {
+		File fileGeneral= new File(folderPath);
 		
 	}
 }
