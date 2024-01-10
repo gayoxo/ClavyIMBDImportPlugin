@@ -25,6 +25,13 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+			<groupId>pluginModel</groupId>
+			<artifactId>pluginModel</artifactId>
+			<version>1</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/ClavyPluginModel.jar</systemPath>
+		</dependency>
   </dependencies>
 
   <build>
