@@ -14,6 +14,10 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import fdi.ucm.server.modelComplete.collection.CompleteCollection;
+import fdi.ucm.server.modelComplete.collection.document.CompleteDocuments;
+import fdi.ucm.server.modelComplete.collection.document.CompleteTextElement;
+import fdi.ucm.server.modelComplete.collection.grammar.CompleteGrammar;
+import fdi.ucm.server.modelComplete.collection.grammar.CompleteTextElementType;
 
 
 public class CollectionIMDB 
@@ -28,7 +32,6 @@ public class CollectionIMDB
 		C.debugfile=true;
 		C.procesaDBFilesFolder("files/ex1/", log);
 		
-		/**
 		
 		 try {
 				String FileIO = System.getProperty("user.home")+File.separator+System.currentTimeMillis()+".clavy";
@@ -44,7 +47,7 @@ public class CollectionIMDB
 				e.printStackTrace();
 			}
 			
-			**/
+			
 	}
 
 	private CompleteCollection getCollection() {
@@ -102,9 +105,45 @@ public class CollectionIMDB
 				SS.add(tablaKEy.get(intkey));
 			}
 			
-			System.out.println("Pelicula :" +FilKey.getKey()+" KeyWords:"+Arrays.toString(SS.toArray()));
+			//System.out.println("Pelicula :" +FilKey.getKey()+" KeyWords:"+Arrays.toString(SS.toArray()));
 			
 		}
+		
+		CompleteGrammar CG=new CompleteGrammar("Pelicula", "Gramatica de la Pelicula", C);
+		C.getMetamodelGrammar().add(CG);
+		
+		int maxTerm=0;
+		
+		for (Entry<String, List<Integer>> FilKey : tablaFilm.entrySet())
+			if (FilKey.getValue().size()>maxTerm) 
+				maxTerm=FilKey.getValue().size();
+
+		
+		CompleteTextElementType lista[] = new CompleteTextElementType[maxTerm];
+		
+		CompleteTextElementType CTET=new CompleteTextElementType("Termino", CG);
+		CTET.setBrowseable(true);
+		CG.getSons().add(CTET);
+		CTET.setClassOfIterator(CTET);
+		for (int i = 1; i < maxTerm; i++) {
+			CompleteTextElementType CTETex=new CompleteTextElementType("Termino", CG);
+			CG.getSons().add(CTETex);
+			CTETex.setBrowseable(true);
+			CTETex.setClassOfIterator(CTET);
+		}
+		
+		for (Entry<String, List<Integer>> FilKey : tablaFilm.entrySet()) {
+		
+			CompleteDocuments CD=new CompleteDocuments(C, "Pelicula:"+ FilKey.getKey(), "");
+			C.getEstructuras().add(CD);
+			for (int i = 0; i < FilKey.getValue().size(); i++) {
+				CompleteTextElementType iEle=lista[i];
+				CompleteTextElement ElemInst=new CompleteTextElement(iEle, tablaKEy.get(FilKey.getValue().get(i)));
+				CD.getDescription().add(ElemInst);
+			}
+			
+		}
+		
 		
 	}
 }
